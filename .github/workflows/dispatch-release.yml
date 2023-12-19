@@ -82,7 +82,7 @@ jobs:
           fi
           FILES=$(find . -iname '*.yml')
           for FILE in ${FILES}; do
-          sed -E 's|ppapt/github-actions/(.*)@v([0-9]*)|ppapt/github-actions/\1@v${{ inputs.major}}|g' \
+          sed -E 's|ppapt/github-actions/(.*)@v([0-9]*)|ppapt/github-actions/\1@v1
               -i "${FILE}"
           done
           STATUS=$(git status -s)

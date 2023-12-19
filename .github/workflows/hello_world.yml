@@ -1,4 +1,4 @@
-name: dispatch_release
+name: hello_world
 # Create a new release of the github-actions module
 
 # yamllint disable-line rule:truthy
@@ -12,4 +12,4 @@ jobs:
       - name: 'Hello world'
         run: |
           # Hello World
-          echo "Hello World" tee -a "${GITHUB_OUTPUT}"
+          echo "# Hello World" tee -a "${GITHUB_OUTPUT}"

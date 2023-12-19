@@ -47,7 +47,7 @@ jobs:
       - name: 'Checkout repo'
         uses: actions/checkout@v4
         with:
-          repository: 'OXID-eSales/github-actions'
+          repository: 'ppapt/github-actions'
           ref: '${{ steps.branch.outputs.branch }}'
           path: 'github-actions'
           fetch-depth: 0
@@ -82,7 +82,7 @@ jobs:
           fi
           FILES=$(find . -iname '*.yml')
           for FILE in ${FILES}; do
-          sed -E 's|OXID-eSales/github-actions/(.*)@v(.*)|OXID-eSales/github-actions/\1@v${{ inputs.major}}|g' \
+          sed -E 's|ppapt/github-actions/(.*)@v(.*)|ppapt/github-actions/\1@v${{ inputs.major}}|g' \
               -i "${FILE}"
           done
           STATUS=$(git status -s)

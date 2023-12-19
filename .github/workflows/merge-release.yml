@@ -37,11 +37,11 @@ jobs:
             echo "patch=${PATCH}" | tee -a "${GITHUB_OUTPUT}"
           fi
 
-      - name: 'Checkout testplan defaults'
+      - name: 'Checkout repo'
         if: ${{ steps.data.outputs.skip != 'true' }}
         uses: actions/checkout@v4
         with:
-          repository: 'OXID-eSales/github-actions'
+          repository: 'ppapt/github-actions'
           ref: 'main'
           path: 'github-actions'
           fetch-depth: 0

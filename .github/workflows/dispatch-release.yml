@@ -71,7 +71,7 @@ jobs:
           # Merge main branch
           cd github-actions
           git config --global user.email "no-reply@oxid-esales.com"
-          git config --global user.name "Github Actions Bot"
+          git config --global user.name "${{ github.actor }}"
           git checkout main
           git pull
           git checkout '${{ steps.branch.outputs.branch }}'

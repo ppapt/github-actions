@@ -1,0 +1,119 @@
+name: push-validate_workflows
+# Validates workflow files on push
+# yamllint disable-line rule:truthy
+on: push
+
+jobs:
+  init:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: 'Write Report Header'
+        if: always()
+        uses: ppapt/github-actions/begin_report@v1
+        with:
+          title: 'Workflow validation on ${{ github.repository }} by ${{ github.actor }}'
+          repository: '${{ github.server_url }}/${{ github.repository }}'
+          job: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          testplan: ''
+
+      - name: 'Write Report'
+        if: always()
+        uses: ppapt/github-actions/append_report@v1
+        with:
+          header: true
+          phase: lint
+          priority: '001'
+
+  yamllint:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Lint yaml files
+        id: yamllint
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          format: 'github'
+          config_data: |
+            extends: default
+            ignore: .git/*
+            rules:
+              document-start: disable
+              line-length:
+                max: 160
+                level: warning
+              new-line-at-end-of-file:
+                level: warning
+              trailing-spaces:
+                level: warning
+
+      - name: 'Write yamllint Report'
+        if: always()
+        uses: ppapt/github-actions/append_report@v1
+        with:
+          priority: '010'
+          phase: lint
+          title: ''
+          job: 'yamllint'
+          php: ''
+          mysql: ''
+          testplan: ''
+          status: ${{job.status}}
+
+  actionlint:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Run actionlint
+        id: actionlint
+        uses: raven-actions/actionlint@v1
+
+      - name: actionlint Summary
+        if: always()
+        run: |
+          echo "Used actionlint version ${{ steps.actionlint.outputs.version-semver }}"
+          echo "Used actionlint release ${{ steps.actionlint.outputs.version-tag }}"
+          echo "actionlint ended with ${{ steps.actionlint.outputs.exit-code }} exit code"
+          echo "actionlint ended because '${{ steps.actionlint.outputs.exit-message }}'"
+          echo "actionlint found ${{ steps.actionlint.outputs.total-errors }} errors"
+          echo "actionlint checked ${{ steps.actionlint.outputs.total-files }} files"
+          echo "actionlint cache used: ${{ steps.actionlint.outputs.cache-hit }}"
+
+      - name: 'Write actionlint Report'
+        if: always()
+        uses: ppapt/github-actions/append_report@v1
+        with:
+          priority: '020'
+          phase: lint
+          job: 'actionlint'
+          title: ''
+          php: ''
+          mysql: ''
+          testplan: ''
+          status: ${{job.status}}
+
+  finish:
+    if: always()
+    needs:
+      - init
+      - yamllint
+      - actionlint
+    runs-on: 'ubuntu-latest'
+    env:
+      SLACK_WEBHOOK: "${{ secrets.SLACK_WEBHOOK_URL }}"
+    steps:
+      - name: 'Download job results'
+        uses: actions/download-artifact@v3
+        with:
+          name: testplan
+
+      - name: 'Output report'
+        uses: ppapt/github-actions/generate_report@v1
+        with:
+          slack_webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          title: 'Workflow validation on ${{ github.repository }} by ${{ github.actor }}'

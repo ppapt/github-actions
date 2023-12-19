@@ -79,6 +79,7 @@ jobs:
           STATUS=$(git status -s)
           if [ -n "${STATUS}" ]; then
             git add --all
+            git commit -m "Merge main"
           fi
           FILES=$(find . -iname '*.yml')
           for FILE in ${FILES}; do
@@ -88,7 +89,10 @@ jobs:
           STATUS=$(git status -s)
           if [ -n "${STATUS}" ]; then
             git add --all
+            git commit -m "Update versions"
           fi
+          git checkout main
+          git merge '${{ steps.branch.outputs.branch }}'
 
       - name: Generate a token
         id: generate_token
@@ -103,7 +107,6 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
           path: 'github-actions'
           branch: 'release_${{inputs.major}}_${{inputs.minor}}_${{inputs.patch}}'
-          base: 'main'
           assignees: '${{inputs.reviewer}}'
           reviewers: '${{inputs.reviewer}}'
           title: 'Update github-actions to ${{inputs.major}}.${{inputs.minor}}.${{inputs.patch}}'

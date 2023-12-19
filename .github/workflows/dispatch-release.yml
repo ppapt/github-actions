@@ -82,7 +82,7 @@ jobs:
           fi
           FILES=$(find . -iname '*.yml')
           for FILE in ${FILES}; do
-          sed -E 's|ppapt/github-actions/(.*)@v(.*)|ppapt/github-actions/\1@v${{ inputs.major}}|g' \
+          sed -E 's|ppapt/github-actions/(.*)@v([0-9]*)|ppapt/github-actions/\1@v${{ inputs.major}}|g' \
               -i "${FILE}"
           done
           STATUS=$(git status -s)
@@ -96,7 +96,6 @@ jobs:
         with:
           app-id: ${{ secrets.ACTIONS_RELEASE_APP_ID }}
           private-key: ${{ secrets.ACTIONS_RELEASE_APP_PRIVATE_KEY }}
-          owner: 'ppapt'
 
       - name: Create branch and Pull Request
         uses: peter-evans/create-pull-request@v5

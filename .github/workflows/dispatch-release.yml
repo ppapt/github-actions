@@ -96,6 +96,7 @@ jobs:
         with:
           app-id: ${{ secrets.ACTIONS_RELEASE_APP_ID }}
           private-key: ${{ secrets.ACTIONS_RELEASE_APP_PRIVATE_KEY }}
+          owner: 'ppapt'
 
       - name: Create branch and Pull Request
         uses: peter-evans/create-pull-request@v5

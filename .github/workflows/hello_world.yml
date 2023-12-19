@@ -1,0 +1,15 @@
+name: dispatch_release
+# Create a new release of the github-actions module
+
+# yamllint disable-line rule:truthy
+on:
+  workflow_dispatch:
+
+jobs:
+  prepare_release:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: 'Hello world'
+        run: |
+          # Hello World
+          echo "Hello World" tee -a "${GITHUB_OUTPUT}"

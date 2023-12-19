@@ -93,14 +93,14 @@ runs:
     - name: 'Output reports'
       shell: bash
       env:
-        SLACK_WEBKOOK: ${{ inputs.slack_webhook }}
+        SLACK_WEBKOOK: '${{ inputs.slack_webhook }}'
       run: |
         # generate_report: Output reports
         for FILE in $(find reports -type f|sort); do
           cat "${FILE}" >>github_report.md
         done
         cat github_report.md >>"${GITHUB_STEP_SUMMARY}"
-        if [ -n "${{SLACK_WEBHOOK}}" ]; then
+        if [ -n "${SLACK_WEBHOOK}" ]; then
           GROUPLIST=""
           for FILE in $(find slack_reports -type f|sort); do
             GROUP=$(echo "${FILE}"|sed -e 's|\..*$||'|awk -F '-' '{print $2}')

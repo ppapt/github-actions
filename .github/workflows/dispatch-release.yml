@@ -107,7 +107,6 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
           path: 'github-actions'
           branch: 'release_${{inputs.major}}_${{inputs.minor}}_${{inputs.patch}}'
-
           assignees: '${{inputs.reviewer}}'
           reviewers: '${{inputs.reviewer}}'
           title: 'Update github-actions to ${{inputs.major}}.${{inputs.minor}}.${{inputs.patch}}'

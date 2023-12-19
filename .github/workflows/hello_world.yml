@@ -12,4 +12,4 @@ jobs:
       - name: 'Hello world'
         run: |
           # Hello World
-          echo "# Hello World!!" tee -a "${GITHUB_OUTPUT}"
+          echo "# Hello World!!!" tee -a "${GITHUB_OUTPUT}"

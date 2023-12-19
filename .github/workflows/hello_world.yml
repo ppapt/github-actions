@@ -1,4 +1,4 @@
-name: dispatch_release
+name: hello_world
 # Create a new release of the github-actions module
 
 # yamllint disable-line rule:truthy
